@@ -1,0 +1,8 @@
+{
+  "owners": ["Koen", "René", "Laurina", "Jeff", "Niels", "Raymond", "Tobias", "Rosalie", "Allard", "Famke"],
+  "lanes": ["Ad hoc", "Onderhoud", "Dashboards", "Analyses", "Voorspellend", "Overig"],
+  "statuses": ["Backlog", "In analyse", "In uitvoering", "Gereed"],
+  "priorities": ["Hoog", "Midden", "Laag"],
+  "impacts": ["XS", "S", "M", "L", "XL"],
+  "dataOptions": ["Ja", "Deels", "Nee"]
+}
