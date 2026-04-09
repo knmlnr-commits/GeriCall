@@ -1,6 +1,7 @@
 const { useState, useEffect, useRef, useCallback } = React;
 
 /* ── constants ── */
+const VERSION = "1.4.0";
 const ORANGE = "#E8732A";
 const MONTHS_NL = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
 var DEADLINES = [""];
@@ -431,7 +432,7 @@ function Backlog() {
       <div style={S.topBar}>
         <img src="/reporting-backlog/logo.jfif" alt="GeriCall" style={S.logo} />
         <span style={S.title}>Reporting backlog</span>
-        <span style={S.liveBadge}>Live {'\u00B7'} bewerken</span>
+        <span style={S.liveBadge}>v{VERSION} {'\u00B7'} Live</span>
         <div style={{ flex: 1 }} />
         <button style={S.gearBtn} onClick={function() { setShowAdmin(true); }}
           onMouseEnter={function(e) { e.currentTarget.style.borderColor = ORANGE; e.currentTarget.style.color = ORANGE; }}
