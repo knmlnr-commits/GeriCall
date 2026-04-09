@@ -105,6 +105,8 @@ const S = {
   adminSectionTitle: { fontSize: 14, fontWeight: 700, color: "#4A4A4A", marginBottom: 8 },
   chip: { display: "inline-flex", alignItems: "center", gap: 4, background: "#f7f7f7", border: "1px solid #ececec", borderRadius: 16, padding: "4px 10px", fontSize: 13, color: "#4A4A4A", margin: "3px 4px 3px 0" },
   chipDel: { background: "none", border: "none", color: "#ccc", cursor: "pointer", fontWeight: 700, fontSize: 14, padding: 0, lineHeight: 1 },
+  addLaneRow: { cursor: "pointer", background: "#fff" },
+  addLaneCell: { padding: "6px 12px", color: "#ccc", fontSize: 13, borderBottom: "1px solid #f0f0f0" },
   addRow: { display: "flex", gap: 8, marginTop: 8 },
   addInput: { flex: 1, padding: "6px 10px", border: "1.5px solid #ececec", borderRadius: 8, fontSize: 13, fontFamily: "DM Sans", outline: "none" },
   addBtn: { background: ORANGE, color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "DM Sans" },
@@ -364,6 +366,14 @@ function Backlog() {
     scheduleSave();
   };
 
+  var addItemToLane = function(lane) {
+    setItems(function(prev) {
+      var maxId = prev.reduce(function(m, it) { return Math.max(m, it.id); }, 0);
+      return prev.concat([{ id: maxId + 1, lane: lane, prio: config.priorities[1] || "Midden", status: config.statuses[0] || "Backlog", title: "", owner: "", requestor: "", deadline: "", impact: "M", data: "" }]);
+    });
+    scheduleSave();
+  };
+
   var deleteItem = function(id) {
     if (!confirm("Zeker weten?")) return;
     setItems(function(prev) { return prev.filter(function(it) { return it.id !== id; }); });
@@ -487,6 +497,13 @@ function Backlog() {
                     </td>
                   </tr>
                 ); })}
+                <tr style={S.addLaneRow} onClick={function() { addItemToLane(g.lane); }}
+                  onMouseEnter={function(e) { e.currentTarget.style.background = "#f7f7f7"; }}
+                  onMouseLeave={function(e) { e.currentTarget.style.background = "#fff"; }}>
+                  <td colSpan={9} style={S.addLaneCell}>
+                    <span style={{ marginRight: 6 }}>+</span> Nieuw item in {g.lane}
+                  </td>
+                </tr>
               </React.Fragment>
             ); })}
             {grouped.length === 0 && (
