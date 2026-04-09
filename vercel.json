@@ -1,5 +1,14 @@
 {
   "framework": "vite",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "functions": {
+    "api/reporting-backlog/backlog.js": {
+      "includeFiles": "api/reporting-backlog/_initial-data.json"
+    }
+  },
+  "rewrites": [
+    { "source": "/reporting-backlog", "destination": "/reporting-backlog/index.html" },
+    { "source": "/reporting-backlog/", "destination": "/reporting-backlog/index.html" }
+  ]
 }
