@@ -2,6 +2,9 @@ const { useState, useEffect, useRef, useCallback } = React;
 
 /* ── constants ── */
 const ORANGE = "#E8732A";
+const MONTHS_NL = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
+var DEADLINES = [""];
+(function() { for (var y = 2026; y <= 2027; y++) { for (var m = (y === 2026 ? 3 : 0); m < 12; m++) { DEADLINES.push(MONTHS_NL[m] + " " + y); } } })();
 
 const DEFAULT_CONFIG = {
   owners: ["Koen", "Ren\u00e9", "Laurina", "Jeff", "Niels", "Raymond", "Tobias", "Rosalie", "Allard", "Famke"],
@@ -305,7 +308,10 @@ function NewItemModal({ config, onAdd, onClose }) {
         </div>
         <div style={S.formGroup}>
           <label style={S.formLabel}>Requestor</label>
-          <input style={S.input} value={requestor} onChange={function(e) { setRequestor(e.target.value); }} />
+          <select style={S.select} value={requestor} onChange={function(e) { setRequestor(e.target.value); }}>
+            <option value="">(geen)</option>
+            {config.owners.map(function(o) { return <option key={o} value={o}>{o}</option>; })}
+          </select>
         </div>
         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 20 }}>
           <button type="button" style={Object.assign({}, S.filterBtn, { padding: "8px 20px" })} onClick={onClose}>Annuleren</button>
@@ -463,10 +469,10 @@ function Backlog() {
                       <InlineDropdown value={it.owner} options={ownerOptions} bgFn={function() { return { background: "#ececec", color: "#666" }; }} onChange={function(v) { updateItem(it.id, "owner", v); }} />
                     </td>
                     <td style={Object.assign({}, S.td, { minWidth: 100 })}>
-                      <InlineText value={it.requestor} onChange={function(v) { updateItem(it.id, "requestor", v); }} />
+                      <InlineDropdown value={it.requestor} options={ownerOptions} bgFn={function() { return { background: "#ececec", color: "#666" }; }} onChange={function(v) { updateItem(it.id, "requestor", v); }} />
                     </td>
                     <td style={Object.assign({}, S.td, { minWidth: 100 })}>
-                      <InlineText value={it.deadline} onChange={function(v) { updateItem(it.id, "deadline", v); }} />
+                      <InlineDropdown value={it.deadline} options={DEADLINES} bgFn={function(v) { return v ? { background: "#ececec", color: "#666" } : { background: "#f7f7f7", color: "#888" }; }} onChange={function(v) { updateItem(it.id, "deadline", v); }} />
                     </td>
                     <td style={S.td}>
                       <InlineDropdown value={it.impact} options={config.impacts} bgFn={impactBg} onChange={function(v) { updateItem(it.id, "impact", v); }} />
