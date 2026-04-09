@@ -49,7 +49,8 @@ function impactBg(v) {
 const S = {
   loginWrap: { display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", background: "#f7f7f7" },
   loginBox: { background: "#fff", borderRadius: 12, padding: 40, width: 360, boxShadow: "0 2px 16px rgba(0,0,0,.08)", textAlign: "center" },
-  loginHeader: { background: ORANGE, color: "#fff", borderRadius: "12px 12px 0 0", margin: "-40px -40px 24px", padding: "28px 40px", fontSize: 22, fontWeight: 700 },
+  loginHeader: { background: ORANGE, borderRadius: "12px 12px 0 0", margin: "-40px -40px 24px", padding: "20px 40px", display: "flex", alignItems: "center", justifyContent: "center" },
+  loginLogo: { height: 48, borderRadius: 8 },
   input: { width: "100%", padding: "10px 14px", border: "1.5px solid #ececec", borderRadius: 8, fontSize: 15, fontFamily: "DM Sans", outline: "none" },
   btnOrange: { background: ORANGE, color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", fontFamily: "DM Sans" },
   btnGrey: { background: "#fff", color: "#666", border: "1.5px solid #ececec", borderRadius: 8, padding: "10px 24px", fontSize: 15, fontWeight: 600, cursor: "pointer", fontFamily: "DM Sans" },
@@ -57,7 +58,7 @@ const S = {
 
   page: { maxWidth: 1400, margin: "0 auto", padding: "24px 20px" },
   topBar: { display: "flex", alignItems: "center", gap: 14, marginBottom: 20, flexWrap: "wrap" },
-  logo: { width: 38, height: 38, background: ORANGE, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 20, flexShrink: 0 },
+  logo: { height: 34, borderRadius: 6, flexShrink: 0 },
   title: { fontSize: 22, fontWeight: 700, color: "#4A4A4A" },
   liveBadge: { background: "#FDEBD0", color: ORANGE, fontSize: 12, fontWeight: 600, padding: "4px 12px", borderRadius: 20 },
 
@@ -183,7 +184,7 @@ function LoginScreen({ onLogin }) {
   return (
     <div style={S.loginWrap}>
       <form style={S.loginBox} onSubmit={submit}>
-        <div style={S.loginHeader}>GeriCall</div>
+        <div style={S.loginHeader}><img src="/reporting-backlog/logo.jfif" alt="GeriCall" style={S.loginLogo} /></div>
         <div style={{ marginBottom: 18, fontSize: 15, color: "#666" }}>Reporting backlog</div>
         <input type="password" placeholder="Wachtwoord" style={Object.assign({}, S.input, { marginBottom: 12 })} value={pw} onChange={function(e) { setPw(e.target.value); }} autoFocus />
         {err && <div style={S.error}>{err}</div>}
@@ -390,7 +391,7 @@ function Backlog() {
     <div style={S.page}>
       {/* top bar */}
       <div style={S.topBar}>
-        <div style={S.logo}>G</div>
+        <img src="/reporting-backlog/logo.jfif" alt="GeriCall" style={S.logo} />
         <span style={S.title}>Reporting backlog</span>
         <span style={S.liveBadge}>Live {'\u00B7'} bewerken</span>
         <div style={{ flex: 1 }} />
