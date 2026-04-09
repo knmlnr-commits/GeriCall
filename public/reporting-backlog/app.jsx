@@ -1,6 +1,7 @@
 const { useState, useEffect, useRef, useCallback } = React;
 
 /* ── constants ── */
+const VERSION = "1.4.0";
 const ORANGE = "#E8732A";
 const MONTHS_NL = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
 var DEADLINES = [""];
@@ -116,27 +117,45 @@ const S = {
 
 function InlineDropdown({ value, options, bgFn, onChange }) {
   const [open, setOpen] = useState(false);
+  const [highlighted, setHighlighted] = useState(-1);
   var ref = useRef();
+  var badgeRef = useRef();
 
   useEffect(function() {
     if (!open) return;
+    setHighlighted(-1);
     var handler = function(e) { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
     document.addEventListener("mousedown", handler);
     return function() { document.removeEventListener("mousedown", handler); };
   }, [open]);
 
+  var handleKeyDown = function(e) {
+    if (!open) {
+      if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") { e.preventDefault(); setOpen(true); return; }
+      return;
+    }
+    if (e.key === "ArrowDown") { e.preventDefault(); setHighlighted(function(h) { return h < options.length - 1 ? h + 1 : 0; }); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setHighlighted(function(h) { return h > 0 ? h - 1 : options.length - 1; }); }
+    else if (e.key === "Enter" && highlighted >= 0) { e.preventDefault(); onChange(options[highlighted]); setOpen(false); }
+    else if (e.key === "Escape") { setOpen(false); }
+    else if (e.key === "Tab") { setOpen(false); }
+  };
+
   return (
     <span style={S.dropdownWrap} ref={ref}>
-      <span style={S.badge(bgFn ? bgFn(value) : { background: "#ececec", color: "#666" })} onClick={function() { setOpen(!open); }}>
+      <span ref={badgeRef} tabIndex={0} style={S.badge(bgFn ? bgFn(value) : { background: "#ececec", color: "#666" })}
+        onClick={function() { setOpen(!open); }}
+        onFocus={function() { setOpen(true); }}
+        onKeyDown={handleKeyDown}>
         {value || "\u2014"}
       </span>
       {open && (
         <div style={S.dropdown}>
-          {options.map(function(o) { return (
-            <div key={o} style={Object.assign({}, S.dropdownItem, { fontWeight: o === value ? 700 : 400 })}
-              onMouseEnter={function(e) { e.currentTarget.style.background = "#f7f7f7"; }}
+          {options.map(function(o, i) { return (
+            <div key={o} style={Object.assign({}, S.dropdownItem, { fontWeight: o === value ? 700 : 400, background: i === highlighted ? "#f7f7f7" : "#fff" })}
+              onMouseEnter={function() { setHighlighted(i); }}
               onMouseLeave={function(e) { e.currentTarget.style.background = "#fff"; }}
-              onClick={function() { onChange(o); setOpen(false); }}>
+              onClick={function() { onChange(o); setOpen(false); if (badgeRef.current) badgeRef.current.focus(); }}>
               {o || "(leeg)"}
             </div>
           ); })}
@@ -156,14 +175,18 @@ function InlineText({ value, onChange }) {
 
   if (editing) {
     return (
-      <input ref={inputRef} style={S.editInput} value={draft}
+      <input ref={inputRef} tabIndex={0} style={S.editInput} value={draft}
         onChange={function(e) { setDraft(e.target.value); }}
         onBlur={function() { setEditing(false); if (draft !== value) onChange(draft); }}
-        onKeyDown={function(e) { if (e.key === "Enter") { setEditing(false); if (draft !== value) onChange(draft); } if (e.key === "Escape") { setDraft(value); setEditing(false); } }}
+        onKeyDown={function(e) { if (e.key === "Enter") { e.preventDefault(); setEditing(false); if (draft !== value) onChange(draft); } if (e.key === "Escape") { setDraft(value); setEditing(false); } }}
       />
     );
   }
-  return <span style={{ cursor: "pointer", padding: "4px 0", display: "inline-block", minWidth: 30 }} onClick={function() { setEditing(true); }}>{value || "\u2014"}</span>;
+  return <span tabIndex={0} style={{ cursor: "pointer", padding: "4px 0", display: "inline-block", minWidth: 30, borderRadius: 4, outline: "none" }}
+    onClick={function() { setEditing(true); }}
+    onFocus={function() { setEditing(true); }}
+    onKeyDown={function(e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setEditing(true); } }}>
+    {value || "\u2014"}</span>;
 }
 
 /* ── login screen ── */
@@ -409,7 +432,7 @@ function Backlog() {
       <div style={S.topBar}>
         <img src="/reporting-backlog/logo.jfif" alt="GeriCall" style={S.logo} />
         <span style={S.title}>Reporting backlog</span>
-        <span style={S.liveBadge}>Live {'\u00B7'} bewerken</span>
+        <span style={S.liveBadge}>v{VERSION} {'\u00B7'} Live</span>
         <div style={{ flex: 1 }} />
         <button style={S.gearBtn} onClick={function() { setShowAdmin(true); }}
           onMouseEnter={function(e) { e.currentTarget.style.borderColor = ORANGE; e.currentTarget.style.color = ORANGE; }}
