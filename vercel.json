@@ -5,6 +5,9 @@
   "functions": {
     "api/reporting-backlog/backlog.js": {
       "includeFiles": "api/reporting-backlog/_initial-data.json"
+    },
+    "api/reporting-backlog/config.js": {
+      "includeFiles": "api/reporting-backlog/_initial-config.json"
     }
   },
   "rewrites": [
