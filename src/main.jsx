@@ -23,12 +23,16 @@ const styles = {
   },
   header: {
     background: ORANGE,
-    color: "#fff",
     borderRadius: "12px 12px 0 0",
     margin: "-40px -40px 24px",
-    padding: "28px 40px",
-    fontSize: 22,
-    fontWeight: 700,
+    padding: "20px 40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  headerLogo: {
+    height: 48,
+    borderRadius: 8,
   },
   input: {
     width: "100%",
@@ -100,7 +104,9 @@ function LoginGate({ children }) {
         rel="stylesheet"
       />
       <form style={styles.box} onSubmit={submit}>
-        <div style={styles.header}>GeriCall</div>
+        <div style={styles.header}>
+          <img src="/logo.jfif" alt="GeriCall" style={styles.headerLogo} />
+        </div>
         <div style={styles.sub}>Verzorgend Portaal</div>
         <input
           type="password"
