@@ -161,7 +161,7 @@ function LoginScreen({ onLogin }) {
       const data = await res.json();
       if (data.ok) { sessionStorage.setItem("authenticated", "true"); onLogin(); }
       else setErr(data.error || "Ongeldig wachtwoord");
-    } catch { setErr("Verbinding mislukt"); }
+    } catch (e) { setErr("Verbinding mislukt"); }
     setLoading(false);
   };
 
@@ -289,7 +289,7 @@ function Backlog() {
       <div style={S.topBar}>
         <div style={S.logo}>G</div>
         <span style={S.title}>Reporting backlog</span>
-        <span style={S.liveBadge}>Live &middot; bewerken</span>
+        <span style={S.liveBadge}>Live {'\u00B7'} bewerken</span>
         <div style={{ flex: 1 }} />
         <button style={S.btnOrange} onClick={() => setShowModal(true)}>+ Nieuw item</button>
       </div>
@@ -368,7 +368,7 @@ function Backlog() {
                     <td style={S.td}>
                       <button style={S.delBtn} title="Verwijderen" onClick={() => deleteItem(it.id)}
                         onMouseEnter={(e) => e.currentTarget.style.color = "#c0392b"}
-                        onMouseLeave={(e) => e.currentTarget.style.color = "#ccc"}>&times;</button>
+                        onMouseLeave={(e) => e.currentTarget.style.color = "#ccc"}>{'\u00D7'}</button>
                     </td>
                   </tr>
                 ))}
